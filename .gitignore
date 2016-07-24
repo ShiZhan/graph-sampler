@@ -1,0 +1,10 @@
+*.exe
+vs/graph-sampler/graph-sampler.VC.db
+vs/graph-sampler/graph-sampler.VC.VC.opendb
+vs/graph-sampler/.vs/*
+vs/graph-sampler/Release/*
+vs/graph-sampler/Debug/*
+vs/graph-sampler/*/Release/*
+vs/graph-sampler/*/Debug/*
+vs/graph-sampler/*/*/Release/*
+vs/graph-sampler/*/*/Debug/*
