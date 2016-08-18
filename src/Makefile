@@ -3,7 +3,10 @@ CC = g++
 CXXFLAGS = --std=c++0x -O3
 
 all:
-	make ses sns pies pies-min pies-inv 
+	make reservoir ses sns pies pies-min pies-inv
+
+reservoir: reservoir.cpp
+	$(CC) reservoir.cpp $(CXXFLAGS) -o reservoir
 
 ses:      ses.cpp
 	$(CC) ses.cpp $(CXXFLAGS) -o ses
@@ -25,7 +28,7 @@ test:
 	echo "sns sampling:"
 	./sns      -s 256 | wc -l
 	echo "ses sampling:"
-	./ses      -s $[ 256 * 8 ] | wc -l
+	./ses      -s 256 | wc -l
 	echo "pies sampling:"
 	./pies     -s 256 | wc -l
 	echo "pies-min sampling:"
@@ -34,5 +37,5 @@ test:
 	./pies-inv -s 256 | wc -l
 
 clean:
-	rm *.exe *.o sns ses pies pies-min pies-inv
+	rm *.exe *.o reservoir sns ses pies pies-min pies-inv
 

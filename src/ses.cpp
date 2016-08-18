@@ -2,59 +2,58 @@
 #include <fstream>
 #include <string>
 #include <queue>
+#include <map>
+#include <vector>
 #include <random>
 #include <ctime>
 #include <stdint.h>
 #include "options.h"
+#include "utils.h"
 
-typedef std::pair<uint64_t, std::string> sample;
-bool operator<(sample a, sample b) { return a.first < b.first; }
+class Sample {
+public:
+	uint64_t r;
+	uint64_t v;
+	std::vector<uint64_t> e;
+	Sample(uint64_t r, uint64_t v) : r(r), v(v) {}
+};
 
-uint64_t ses(uint64_t sample_size, int seed) {
-  std::mt19937_64 gen(seed);
-  std::uniform_int_distribution<uint64_t> ud(0, 0xffffffffffffffff);
+bool operator<(Sample a, Sample b) { return a.r < b.r; }
 
-  uint64_t n = 0, r;
-  std::priority_queue<sample> reservoir;
-  std::string line;
-  while (getline(std::cin, line)) {
-    r = ud(gen);
-    if (reservoir.size() < sample_size)
-      reservoir.push(sample(r, line));
-    else if (reservoir.top().first > r) {
-      reservoir.pop();
-      reservoir.push(sample(r, line));
-    }
-    n++;
-  }
+uint64_t sns(uint64_t sample_size, int seed) {
+	std::mt19937_64 gen(seed);
+	std::uniform_int_distribution<uint64_t> ud(0, 0xffffffffffffffff);
 
-  while(!reservoir.empty()) {
-    std::cout << reservoir.top().second << std::endl;
-    reservoir.pop();
-  }
+	uint64_t n = 0, u, v;
+	std::priority_queue<Sample> reservoir;
+	std::string line;
+	while (getline(std::cin, line)) {
+		SSCANF((line.c_str(), "%lln %lln", &u, &v));
+		n++;
+	}
 
-  return n;
+	return n;
 }
 
-int main (int argc, char* argv[]) {
-  using namespace std;
-  using namespace opt;
+int main(int argc, char* argv[]) {
+	using namespace std;
+	using namespace opt;
 
-  uint64_t sample_size = 2 << 15;
+	uint64_t sample_size = 2 << 13;
 
-  if (chkOption(argv, argv + argc, "-h")) {
-    cout
-      << "ses [options]" << endl
-      << " -h: ask for help" << endl
-      << " -s: sample size, default: " << sample_size << ")" << endl
-      << " -r: srand,       default: current time" << endl;
-    return 0;
-  }
+	if (chkOption(argv, argv + argc, "-h")) {
+		cout
+			<< "ses [options]" << endl
+			<< " -h: ask for help" << endl
+			<< " -s: sample size, default: " << sample_size << ")" << endl
+			<< " -r: srand,       default: current time" << endl;
+		return 0;
+	}
 
-  sample_size = getValue(argv, argv + argc, "-s", sample_size);
-  int seed    = getValue(argv, argv + argc, "-r", time(NULL));
+	sample_size = getValue(argv, argv + argc, "-s", sample_size);
+	int seed = getValue(argv, argv + argc, "-r", time(NULL));
 
-  uint64_t n_edge = ses(sample_size, seed);
+	uint64_t n_edge = sns(sample_size, seed);
 
-  return 0;
+	return 0;
 }
